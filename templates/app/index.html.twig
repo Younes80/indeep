@@ -1,15 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AppController!{% endblock %}
+{% block title %}Indeep | Toutes nos offres{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row my-5">
+    {% include "components/_navbar.html.twig" %}
+    <div id="home" class="container">
+        <div class="row my-5 pt-5">
             <div class="col-md-12 text-center">
                 <h2>Découvrez toutes nos offres !</h2>
             </div>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mb-5">
             <div class="col-md-6">
                 {% for offer in offers %}    
                     <a href="/offer/{{offer.id}}">

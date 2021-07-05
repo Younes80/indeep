@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OfferRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,15 +34,6 @@ class Offer
      */
     private $ville;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $contrat;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $duree;
 
     /**
      * @ORM\Column(type="datetime")
@@ -51,6 +44,36 @@ class Offer
      * @ORM\Column(type="string", length=1500)
      */
     private $detail;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="name")
+     */
+    private $contrats;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ContratType::class, mappedBy="name")
+     */
+    private $contratTypes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="offers_id")
+     */
+    private $contrat;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ContratType::class, mappedBy="offer_id")
+     */
+    private $contratType;
+
+    public function __construct()
+    {
+        $this->contrats = new ArrayCollection();
+        $this->contratTypes = new ArrayCollection();
+        $this->contrat = new ArrayCollection();
+        $this->contratType = new ArrayCollection();
+    }
+
+
 
     public function getId(): ?int
     {
@@ -93,29 +116,9 @@ class Offer
         return $this;
     }
 
-    public function getContrat(): ?string
-    {
-        return $this->contrat;
-    }
 
-    public function setContrat(string $contrat): self
-    {
-        $this->contrat = $contrat;
 
-        return $this;
-    }
 
-    public function getDuree(): ?string
-    {
-        return $this->duree;
-    }
-
-    public function setDuree(string $duree): self
-    {
-        $this->duree = $duree;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -140,4 +143,81 @@ class Offer
 
         return $this;
     }
+
+    /**
+     * @return Collection|Contrat[]
+     */
+    public function getContrats(): Collection
+    {
+        return $this->contrats;
+    }
+
+    public function addContrat(Contrat $contrat): self
+    {
+        if (!$this->contrats->contains($contrat)) {
+            $this->contrats[] = $contrat;
+            $contrat->setName($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContrat(Contrat $contrat): self
+    {
+        if ($this->contrats->removeElement($contrat)) {
+            // set the owning side to null (unless already changed)
+            if ($contrat->getName() === $this) {
+                $contrat->setName(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ContratType[]
+     */
+    public function getContratTypes(): Collection
+    {
+        return $this->contratTypes;
+    }
+
+    public function addContratType(ContratType $contratType): self
+    {
+        if (!$this->contratTypes->contains($contratType)) {
+            $this->contratTypes[] = $contratType;
+            $contratType->setName($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContratType(ContratType $contratType): self
+    {
+        if ($this->contratTypes->removeElement($contratType)) {
+            // set the owning side to null (unless already changed)
+            if ($contratType->getName() === $this) {
+                $contratType->setName(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contrat[]
+     */
+    public function getContrat(): Collection
+    {
+        return $this->contrat;
+    }
+
+    /**
+     * @return Collection|ContratType[]
+     */
+    public function getContratType(): Collection
+    {
+        return $this->contratType;
+    }
+
 }
