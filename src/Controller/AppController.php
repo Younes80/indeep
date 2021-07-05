@@ -28,6 +28,16 @@ class AppController extends AbstractController
     /**
      * @Route("/offer/{id}", name="offer")
      */
+    // public function showOffer(OfferRepository $repo, Request $request, Offer $offer )
+    // {
+    // //    $offer = $repo->findOneBy(["id" => $request->attributes->get("id")]);
+    //     return $this->render('app/offer.html.twig', [
+    //         'offer' => $offer,
+    //     ]);
+    // }
+    /**
+     * @Route("/offer/{id}", name="offer")
+     */
     public function showOffer(OfferRepository $repo, Request $request )
     {
        $offer = $repo->findOneBy(["id" => $request->attributes->get("id")]);
