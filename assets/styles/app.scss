@@ -2,12 +2,20 @@
 
 /* ----- General ----- */
 
+* {
+	font-family: $font-2;
+}
+
 h1,
 h2,
 h3,
 h4,
 h4 {
 	color: $color-1;
+}
+
+h2 {
+	font-family: $font-1;
 }
 
 /* ----- Homepage ----- */
