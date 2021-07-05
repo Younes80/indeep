@@ -12,8 +12,8 @@
         </div>
         <div class="row justify-content-center mb-5">
             <div class="col-md-6">
-                {% for offer in offers %}    
-                    <a href="/offer/{{offer.id}}">
+                {% for offer in offers %}  
+                    <a href="{{ path("offer",{id: offer.id} )}}">
                         <div class="card m-2 shadow border-0">
                             <div class="card-body">
                                 <h3 class="card-title h5">{{ offer.title }}</h3>
@@ -21,7 +21,7 @@
                                 <p class="card-subtitle mb-2 fst-italic text-muted h6">{{ offer.ville }}</p>
                                 <div class="d-flex justify-content-between" >
                                     <span class="fs-6 fw-light">{{ offer.createdAt | date ("d/m/Y") }}</span>
-                                    <span class="fs-6 fw-light">{{ offer.contrat }} / {{ offer.duree }}</span>
+                                    <span class="fs-6 fw-light">{{ offer.contrats.name }} / {{ offer.ContratType.name }}</span>
                                 </div>
                             </div>
                         </div>

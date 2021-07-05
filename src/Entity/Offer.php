@@ -1,10 +1,6 @@
 <?php
 
 namespace App\Entity;
-
-use App\Repository\OfferRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,31 +42,20 @@ class Offer
     private $detail;
 
     /**
-     * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="name")
+     * @ORM\ManyToOne(targetEntity=Contrat::class, inversedBy="offers")
      */
     private $contrats;
 
     /**
-     * @ORM\OneToMany(targetEntity=ContratType::class, mappedBy="name")
+     * @ORM\ManyToOne(targetEntity=ContratType::class, inversedBy="offers")
      */
-    private $contratTypes;
+    private $ContratType;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Contrat::class, mappedBy="offers_id")
-     */
-    private $contrat;
-
-    /**
-     * @ORM\OneToMany(targetEntity=ContratType::class, mappedBy="offer_id")
-     */
-    private $contratType;
+    
 
     public function __construct()
     {
-        $this->contrats = new ArrayCollection();
-        $this->contratTypes = new ArrayCollection();
-        $this->contrat = new ArrayCollection();
-        $this->contratType = new ArrayCollection();
+        
     }
 
 
@@ -144,80 +129,29 @@ class Offer
         return $this;
     }
 
-    /**
-     * @return Collection|Contrat[]
-     */
-    public function getContrats(): Collection
+    public function getContrats(): ?Contrat
     {
         return $this->contrats;
     }
 
-    public function addContrat(Contrat $contrat): self
+    public function setContrats(?Contrat $contrats): self
     {
-        if (!$this->contrats->contains($contrat)) {
-            $this->contrats[] = $contrat;
-            $contrat->setName($this);
-        }
+        $this->contrats = $contrats;
 
         return $this;
     }
 
-    public function removeContrat(Contrat $contrat): self
+    public function getContratType(): ?ContratType
     {
-        if ($this->contrats->removeElement($contrat)) {
-            // set the owning side to null (unless already changed)
-            if ($contrat->getName() === $this) {
-                $contrat->setName(null);
-            }
-        }
+        return $this->ContratType;
+    }
+
+    public function setContratType(?ContratType $ContratType): self
+    {
+        $this->ContratType = $ContratType;
 
         return $this;
     }
 
-    /**
-     * @return Collection|ContratType[]
-     */
-    public function getContratTypes(): Collection
-    {
-        return $this->contratTypes;
-    }
-
-    public function addContratType(ContratType $contratType): self
-    {
-        if (!$this->contratTypes->contains($contratType)) {
-            $this->contratTypes[] = $contratType;
-            $contratType->setName($this);
-        }
-
-        return $this;
-    }
-
-    public function removeContratType(ContratType $contratType): self
-    {
-        if ($this->contratTypes->removeElement($contratType)) {
-            // set the owning side to null (unless already changed)
-            if ($contratType->getName() === $this) {
-                $contratType->setName(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Contrat[]
-     */
-    public function getContrat(): Collection
-    {
-        return $this->contrat;
-    }
-
-    /**
-     * @return Collection|ContratType[]
-     */
-    public function getContratType(): Collection
-    {
-        return $this->contratType;
-    }
 
 }

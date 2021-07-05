@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Entity;
-
-use App\Repository\ContratTypeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,40 +18,63 @@ class ContratType
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Offer::class, inversedBy="contratTypes")
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Offer::class, inversedBy="contratType")
+     * @ORM\OneToMany(targetEntity=Offer::class, mappedBy="ContratType")
      */
-    private $offer_id;
+    private $offers;
+
+    public function __construct()
+    {
+        $this->offers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?Offer
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(?Offer $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getOfferId(): ?Offer
+    /**
+     * @return Collection|Offer[]
+     */
+    public function getOffers(): Collection
     {
-        return $this->offer_id;
+        return $this->offers;
     }
 
-    public function setOfferId(?Offer $offer_id): self
+    public function addOffer(Offer $offer): self
     {
-        $this->offer_id = $offer_id;
+        if (!$this->offers->contains($offer)) {
+            $this->offers[] = $offer;
+            $offer->setContratType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffer(Offer $offer): self
+    {
+        if ($this->offers->removeElement($offer)) {
+            // set the owning side to null (unless already changed)
+            if ($offer->getContratType() === $this) {
+                $offer->setContratType(null);
+            }
+        }
 
         return $this;
     }
